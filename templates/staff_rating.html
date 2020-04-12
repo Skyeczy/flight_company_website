@@ -1,0 +1,188 @@
+{% extends 'base.html' %}
+
+{% block head %}
+    <title>View ratings</title>
+    <style>
+        body{
+            height:auto;
+            background-image: url("/static/airplane1.jpeg");
+            background-repeat: no-repeat;
+            background-size: 100% 100%;
+            filter: alpha(opacity=20)
+        }
+
+        div.modal-lg {
+            width: 1200px !important;
+            height: auto !important;
+        }
+
+        input[type='text'],
+        input[type='number'],
+        input[type='password'],
+        input[type='date'],
+        input[type='email'],
+
+        select,
+        textarea {
+            outline: none;
+            box-shadow: none !important;
+            border: 1px solid #ccc !important;
+        }
+        .sidebar-left {
+            position:fixed;
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            left:0px;
+            top:8%;
+            width: 15%;
+            background-color: #f1f1f1;
+            position:fixed;
+            height: 95%;
+            /* overflow: auto; */
+        }
+
+        .sidebar-left li a {
+            margin-top:0px;
+            display: block;
+            color: #000;
+            padding: 8px 16px;
+            text-decoration: none;
+            position: relative;
+        }
+        .navbar-top{
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #333;
+            opacity:1;
+            position: fixed;
+            top: 0;
+            left:0;
+            height:8%;
+            width: 100%;
+            z-index:1;
+        }
+
+        .navbar-text-li{
+            float: left;
+            font-size:130%;
+            height:100%;
+            margin-top:0px;
+            color: white;
+            /* margin-left: 15%; */
+        }
+        .navbar-text-li-right{
+            float: right;
+            color: white;
+            font-size:130%;
+            height:100%;
+            margin-top:10px;
+            margin-right: 20px;
+        }
+        .navbar-text-li a{
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            height:100%;
+            text-decoration:none;
+            /* margin-left: 15%; */
+        }
+
+        .navbar-text-li a:hover:not(.navbar-text) {
+            background-color: #111;
+        }
+    </style>
+{% endblock %}
+<br>
+<br>
+<br>
+<br>
+{% block main %}
+
+</div>
+<ul class="navbar-top" id="navbar">
+    {% if username %}
+    <li class='navbar-text-li'><a class='navbar-text' href=''> Welcome to Coye company, {{ username }} ! </a></li>
+    {% endif %}
+    <li class='navbar-text-li-right'><a class='navbar-text' href='/logout'>Logout</a></li>
+</ul>
+
+<ul class='sidebar-left' id='sidebar' method = 'post'>
+        <li id = 'home'>
+            <a href = '/home_staff'>Home</a>
+        </li>
+        <li id = 'flighthistory'>
+            <a href = '/staff_search_flight'>Search Flights</a>
+        </li>
+        <li id = 'flights'>
+            <a href = '/staff_update_flights'>Update Flights</a>
+        </li>
+        <li id = 'staffrating'>
+                <a href = '/staff_rating'>View Rating</a>
+        </li>
+        <li id = 'staff_allagents'>
+                <a href = '/staff_allagents'>View all agent</a>
+        </li>
+        <li id = 'frequent_customer'>
+            <a href = '/staff_frequent_customer'>View Frequent Customer</a>
+        </li>
+        <li id = 'view_report'>
+                <a href = '/staff_view_report'>View Reports</a>
+        </li>
+        <li id = 'revenue'>
+                <a href = '/staff_revenue'>View Revenue</a>
+        </li>
+        <li id = 'destination'>
+                <a href = '/staff_destination'>View Destinations</a>
+        </li>
+    </li>
+</ul>
+</div>
+</div>
+{% if not no_rate %}
+<h1 class="text-left" style="padding-left: 290px; padding-top: 150px;">
+    Flight ratings of {{staff_airline_name}}:
+</h1>
+
+    <ul class="list-group" id="avg_rating" style="padding-top: 42px; padding-left: 280px; width: 1200px">
+        <div id="result">
+            <center>
+            {% for flight in avg_rating %}
+            <li class="list-group-item list-group-item-info"> 
+                Airline name: {{ flight['airline_name'] }} 
+                &nbsp; &nbsp; Flight number: {{ flight['flight_num'] }} &nbsp; &nbsp; Departure time: {{ flight['depart_date_time'] }} &nbsp; &nbsp; 
+                Average rating: {{ flight['avg'] }} 
+                
+                <li class="list-group-item list-group-item-light" style="width: 400px">Customer rated: </li>
+                    {% for flight_rating in all_rating %}
+                        {% if flight["flight_num"] == flight_rating["flight_num"] and flight["depart_date_time"] == flight_rating["depart_date_time"]%}
+                        <li class="list-group-item list-group-item-light" style="width: 400px;">Customer: {{flight_rating["email"]}} &nbsp; &nbsp; Rating : {{flight_rating["points"]}} </li>
+                        <li class="list-group-item list-group-item-light" style="width: 400px;">Comments: {{flight_rating["flight_comment"]}} </li>
+                        {% endif %}
+                
+                {% endfor %}
+            {% endfor %}
+            </center>
+            </li>
+        </div>
+    </ul>
+</div>
+{% endif %}
+
+{% if no_rate %}
+    <center>
+        <ul class="list-group" style="padding-top: 300px;padding-left: 550px;">
+            <li class="list-group-item list-group-item-info" style="width: 400px;"><strong>Oops! No flight has been rated yet! </strong></li>     
+        </ul>
+    </center>
+{% endif %}
+
+    <center>
+        <img src="/static/logo.jpg" height="3%" width="3%" alt="Coye" class="center" style="padding-top: 300px;">
+        <br>
+        <span class="text-muted">All rights reserved to Coye Company © 2019</span>
+    </center>
+{% endblock %}
